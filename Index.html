@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSIT - Pranveer Singh Institute of Technology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://placehold.co/1920x1080/0f172a/ffffff?text=PSIT+Campus+View') no-repeat center center/cover;
+        }
+        
+        .section-title {
+            @apply text-3xl md:text-4xl font-bold text-slate-800 mb-8 text-center;
+        }
+
+        .card {
+            @apply bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-2">
+                <img src="https://placehold.co/40x40/0ea5e9/ffffff?text=P" alt="PSIT Logo" class="h-10 w-10 rounded-full">
+                <span class="text-xl font-bold text-slate-800">PSIT</span>
+            </a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#home" class="text-slate-600 hover:text-cyan-600">Home</a>
+                <a href="#about" class="text-slate-600 hover:text-cyan-600">About</a>
+                <a href="#academics" class="text-slate-600 hover:text-cyan-600">Academics</a>
+                <a href="student_login.html" class="text-slate-600 hover:text-cyan-600">Student Login</a>
+                <a href="faculty_login.html" class="text-slate-600 hover:text-cyan-600">Faculty Login</a>
+                <a href="#contact" class="text-slate-600 hover:text-cyan-600">Contact</a>
+            </div>
+            <a href="#" class="hidden md:block bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 transition">Admissions Open</a>
+            <button id="mobile-menu-button" class="md:hidden">
+                <i class="fas fa-bars text-2xl text-slate-700"></i>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4">
+            <a href="#home" class="block py-2 text-slate-600 hover:text-cyan-600">Home</a>
+            <a href="#about" class="block py-2 text-slate-600 hover:text-cyan-600">About</a>
+            <a href="#academics" class="block py-2 text-slate-600 hover:text-cyan-600">Academics</a>
+            <a href="student_login.html" class="block py-2 text-slate-600 hover:text-cyan-600">Student Login</a>
+            <a href="faculty_login.html" class="block py-2 text-slate-600 hover:text-cyan-600">Faculty Login</a>
+            <a href="#contact" class="block py-2 text-slate-600 hover:text-cyan-600">Contact</a>
+            <a href="#" class="block mt-2 bg-cyan-600 text-white px-4 py-2 rounded-lg text-center hover:bg-cyan-700 transition">Admissions Open</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-section text-white min-h-[70vh] flex items-center">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">Pranveer Singh Institute of Technology</h1>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto">Fostering Innovation, Nurturing Talent, and Shaping the Future.</p>
+                <div class="mt-8 flex flex-wrap justify-center gap-4">
+                    <a href="student_login.html" class="bg-cyan-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-cyan-700 transition transform hover:scale-105"><i class="fas fa-user-graduate mr-2"></i> Student Login</a>
+                    <a href="faculty_login.html" class="bg-white text-slate-800 px-6 py-3 rounded-lg text-lg font-semibold hover:bg-slate-100 transition transform hover:scale-105"><i class="fas fa-chalkboard-teacher mr-2"></i> Faculty Login</a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Login Portals Section -->
+        <section id="portals" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                 <h2 class="section-title">Login Portals</h2>
+                 <div class="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+                     <!-- Student Portal Card -->
+                     <a href="https://student-page-sage.vercel.app/#dashboard" class="group block">
+                         <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 border-t-4 border-cyan-500 text-center">
+                             <div class="text-5xl text-cyan-500 mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-user-graduate"></i></div>
+                             <h3 class="text-2xl font-bold text-slate-800 mb-2">Student Portal</h3>
+                             <p class="text-slate-500">Access your dashboard, results, attendance, and e-learning resources.</p>
+                         </div>
+                     </a>
+                     <!-- Faculty Portal Card -->
+                     <a href="faculty_login.html" class="group block">
+                         <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 border-t-4 border-indigo-500 text-center">
+                              <div class="text-5xl text-indigo-500 mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-chalkboard-teacher"></i></div>
+                             <h3 class="text-2xl font-bold text-slate-800 mb-2">Faculty Portal</h3>
+                             <p class="text-slate-500">Manage academic records, research, circulars, and administrative tasks.</p>
+                         </div>
+                     </a>
+                 </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="md:w-1/2">
+                        <img src="https://placehold.co/600x400/e2e8f0/334155?text=About+PSIT" alt="About PSIT" class="rounded-xl shadow-lg w-full">
+                    </div>
+                    <div class="md:w-1/2">
+                        <h2 class="section-title text-left">Welcome to PSIT</h2>
+                        <p class="text-slate-600 mb-4">Pranveer Singh Institute of Technology (PSIT), Kanpur, is one of the premier institutes in the country. Established in 2004, PSIT has been a pioneer in providing quality technical and management education.</p>
+                        <p class="text-slate-600 mb-6">Our mission is to achieve excellence in the field of technical education and research through education, innovation, and teamwork. We are committed to providing our students with a world-class education, state-of-the-art infrastructure, and a vibrant campus life.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academics Section -->
+        <section id="academics" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title">Our Academic Programs</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="card">
+                        <img src="https://placehold.co/400x250/38bdf8/ffffff?text=Engineering" class="h-48 w-full object-cover" alt="Engineering">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 text-slate-800">Engineering</h3>
+                            <p class="text-slate-600 text-sm">CSE, IT, ECE, ME, CE & more. Cutting-edge labs and experienced faculty.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img src="https://placehold.co/400x250/6366f1/ffffff?text=Management" class="h-48 w-full object-cover" alt="Management">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 text-slate-800">Management</h3>
+                            <p class="text-slate-600 text-sm">MBA programs with specializations in Finance, Marketing, HR, and IT.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img src="https://placehold.co/400x250/ec4899/ffffff?text=Pharmacy" class="h-48 w-full object-cover" alt="Pharmacy">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 text-slate-800">Pharmacy</h3>
+                            <p class="text-slate-600 text-sm">B.Pharm and M.Pharm courses focusing on pharmaceutical sciences.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img src="https://placehold.co/400x250/f97316/ffffff?text=Computer+Apps" class="h-48 w-full object-cover" alt="Computer Applications">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 text-slate-800">Computer Applications</h3>
+                            <p class="text-slate-600 text-sm">BCA and MCA programs to build a strong foundation in computer science.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-slate-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid md:grid-cols-3 gap-8 text-center md:text-left">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">PSIT Kanpur</h3>
+                    <p class="text-slate-400">NH19, Bhauti, Kanpur, Uttar Pradesh 209305, India</p>
+                    <p class="text-slate-400 mt-2">Phone: <a href="tel:+91-512-2696200" class="hover:text-cyan-400">+91-512-2696200</a></p>
+                    <p class="text-slate-400">Email: <a href="mailto:info@psit.ac.in" class="hover:text-cyan-400">info@psit.ac.in</a></p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><a href="#" class="hover:text-cyan-400">Admissions</a></li>
+                        <li><a href="#" class="hover:text-cyan-400">Anti-Ragging Policy</a></li>
+                        <li><a href="#" class="hover:text-cyan-400">Gallery</a></li>
+                        <li><a href="#" class="hover:text-cyan-400">Careers at PSIT</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4 justify-center md:justify-start">
+                        <a href="#" class="text-slate-400 hover:text-white text-2xl"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white text-2xl"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white text-2xl"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white text-2xl"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-slate-700 pt-6 text-center text-slate-500 text-sm">
+                <p>&copy; 2025 PSIT. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+
+</html>
