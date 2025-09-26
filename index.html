@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - PSIT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* slate-100 */
+        }
+        .dashboard-card {
+            @apply bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+        }
+        .dashboard-card-title {
+            @apply text-lg font-bold text-slate-700 flex items-center mb-4;
+        }
+        .dashboard-card-icon {
+            @apply text-xl w-8 h-8 flex items-center justify-center rounded-full mr-3;
+        }
+        /* Style for the active sidebar link */
+        .sidebar-link-active {
+            @apply bg-cyan-600 text-white font-semibold;
+        }
+        /* Styles for Modal */
+        .modal-backdrop {
+            @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300;
+        }
+    </style>
+</head>
+<body class="flex">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-slate-800 text-white min-h-screen p-4 flex flex-col justify-between print:hidden">
+        <div>
+            <div class="text-center mb-10">
+                <a href="index.html" class="flex items-center justify-center space-x-2">
+                    <img src="https://placehold.co/40x40/0ea5e9/ffffff?text=P" alt="PSIT Logo" class="h-10 w-10 rounded-full">
+                    <span class="text-xl font-bold">PSIT Portal</span>
+                </a>
+            </div>
+            <nav id="sidebar-nav">
+                <a href="#dashboard" class="nav-link flex items-center px-4 py-3 rounded-lg">
+                    <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
+                </a>
+                <a href="#attendance" class="nav-link flex items-center px-4 py-3 mt-2 text-slate-300 hover:bg-slate-700 rounded-lg">
+                    <i class="fas fa-user-check mr-3"></i>Attendance
+                </a>
+                <a href="#marks" class="nav-link flex items-center px-4 py-3 mt-2 text-slate-300 hover:bg-slate-700 rounded-lg">
+                    <i class="fas fa-graduation-cap mr-3"></i>Marks
+                </a>
+                 <a href="#timetable" class="nav-link flex items-center px-4 py-3 mt-2 text-slate-300 hover:bg-slate-700 rounded-lg">
+                    <i class="fas fa-calendar-week mr-3"></i>Timetable
+                </a>
+                 <a href="#medical" class="nav-link flex items-center px-4 py-3 mt-2 text-slate-300 hover:bg-slate-700 rounded-lg">
+                    <i class="fas fa-notes-medical mr-3"></i>Medical
+                </a>
+                <a href="#feedback" class="nav-link flex items-center px-4 py-3 mt-2 text-slate-300 hover:bg-slate-700 rounded-lg">
+                    <i class="fas fa-comment-dots mr-3"></i>Feedback
+                </a>
+                <a href="#notes" class="nav-link flex items-center px-4 py-3 mt-2 text-slate-300 hover:bg-slate-700 rounded-lg">
+                    <i class="fas fa-book-open mr-3"></i>Class Notes
+                </a>
+            </nav>
+        </div>
+        <div>
+             <a href="student_login.html" class="flex items-center px-4 py-3 mt-2 text-slate-300 hover:bg-slate-700 rounded-lg">
+                <i class="fas fa-sign-out-alt mr-3"></i>Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6 md:p-10">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8 print:hidden">
+            <h1 id="main-header" class="text-3xl font-bold text-slate-800">Student Dashboard</h1>
+            <div class="flex items-center space-x-4">
+                <span class="text-slate-600 hidden md:block">Welcome, Alex Johnson!</span>
+                <img src="https://placehold.co/40x40/334155/ffffff?text=A" alt="Student Photo" class="w-10 h-10 rounded-full">
+            </div>
+        </header>
+
+        <!-- Dynamic Content Area -->
+        <main id="main-content">
+            <!-- Content will be rendered here by JavaScript -->
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal-backdrop hidden">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl transform transition-transform duration-300 scale-95">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 id="modal-title" class="text-xl font-bold text-slate-800">Modal Title</h3>
+                <button id="modal-close-btn" class="text-slate-500 hover:text-slate-800 text-2xl leading-none">&times;</button>
+            </div>
+            <div id="modal-body" class="p-6 max-h-[70vh] overflow-y-auto">
+                <!-- Modal content goes here -->
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- DATA --- //
+            const studentData = {
+                name: "Alex Johnson",
+                attendance: {
+                    overall: 85,
+                    totalClasses: 120,
+                    attended: 102,
+                    subjects: [
+                        { name: "Data Structures", attended: 28, total: 30 },
+                        { name: "Algorithms", attended: 29, total: 30 },
+                        { name: "Database Systems", attended: 22, total: 30 },
+                        { name: "Operating Systems", attended: 23, total: 30 },
+                    ]
+                },
+                marks: [
+                    { subject: "Data Structures", score: 88, total: 100, type: "Mid Term" },
+                    { subject: "Algorithms", score: 92, total: 100, type: "Mid Term" },
+                    { subject: "Database Systems", score: 74, total: 100, type: "Mid Term" },
+                    { subject: "Operating Systems", score: 79, total: 100, type: "Mid Term" },
+                    { subject: "Data Structures", score: 45, total: 50, type: "Quiz 1" },
+                ],
+                medical: {
+                    bloodGroup: "O+",
+                    lastCheckup: "15th July 2025",
+                    allergies: "None",
+                    documents: [
+                        { name: "Annual_Checkup_2025.pdf", date: "2025-07-16", link: "#" }
+                    ]
+                },
+                notes: [
+                    { name: "DSA_Unit_4.pdf", type: "pdf", subject: "Data Structures", link: "#" },
+                    { name: "Algo_Lec_5.ppt", type: "ppt", subject: "Algorithms", link: "#" },
+                    { name: "DBMS_Joins.pdf", type: "pdf", subject: "Database Systems", link: "#" },
+                ],
+                faculty: [
+                    "Dr. Smith (Data Structures)",
+                    "Prof. Jones (Algorithms)",
+                    "Dr. Chen (Database Systems)"
+                ],
+                timetable: {
+                    "Monday": [
+                        { time: "10:00 - 11:00", subject: "Data Structures", code: "CS-301", location: "Room 101", faculty: "Dr. Smith" },
+                        { time: "11:00 - 12:00", subject: "Algorithms", code: "CS-302", location: "Room 102", faculty: "Prof. Jones" }
+                    ],
+                    "Tuesday": [
+                        { time: "02:00 - 03:00", subject: "Database Systems", code: "CS-401", location: "Lab 3", faculty: "Dr. Chen" }
+                    ],
+                    "Wednesday": [
+                        { time: "10:00 - 11:00", subject: "Data Structures", code: "CS-301", location: "Room 101", faculty: "Dr. Smith" },
+                        { time: "11:00 - 12:00", subject: "Algorithms", code: "CS-302", location: "Room 102", faculty: "Prof. Jones" }
+                    ],
+                    "Thursday": [
+                        { time: "02:00 - 03:00", subject: "Database Systems", code: "CS-401", location: "Lab 3", faculty: "Dr. Chen" }
+                    ],
+                    "Friday": [
+                        { time: "10:00 - 11:00", subject: "Data Structures", code: "CS-301", location: "Room 101", faculty: "Dr. Smith" }
+                    ]
+                }
+            };
+
+            // --- ELEMENTS --- //
+            const mainContent = document.getElementById('main-content');
+            const sidebarNav = document.getElementById('sidebar-nav');
+            const navLinks = sidebarNav.querySelectorAll('.nav-link');
+            const mainHeader = document.getElementById('main-header');
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+
+            // --- TEMPLATES / RENDER FUNCTIONS --- //
+            
+            const renderDashboard = () => {
+                mainHeader.textContent = "Student Dashboard";
+                mainContent.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        ${renderAttendanceCard(true)}
+                        ${renderMarksCard(true)}
+                        ${renderMedicalCard(true)}
+                        ${renderFeedbackCard()}
+                        ${renderNotesCard(true)}
+                    </div>`;
+                attachCardEventListeners();
+            };
+            
+            const renderAttendanceCard = (isDashboard = false) => {
+                 const { overall, totalClasses, attended } = studentData.attendance;
+                 const missed = totalClasses - attended;
+                 return `
+                    <div id="attendance" class="dashboard-card ${isDashboard ? 'lg:col-span-2' : 'lg:col-span-3'}">
+                        <h3 class="dashboard-card-title">
+                            <span class="dashboard-card-icon bg-blue-100 text-blue-600"><i class="fas fa-user-check"></i></span>
+                            Attendance Record
+                        </h3>
+                        <div class="text-slate-600">
+                            <div class="flex justify-between items-center mb-2">
+                                <span>Overall Attendance:</span>
+                                <span class="font-bold text-green-600 text-lg">${overall}%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                                <div class="bg-green-500 h-2.5 rounded-full" style="width: ${overall}%"></div>
+                            </div>
+                            <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+                                <div><strong class="block text-slate-800">Total Classes:</strong> ${totalClasses}</div>
+                                <div><strong class="block text-slate-800">Attended:</strong> ${attended}</div>
+                                <div><strong class="block text-slate-800">Missed:</strong> ${missed}</div>
+                                <div><strong class="block text-slate-800">Last Updated:</strong> Today</div>
+                            </div>
+                            <button data-modal="attendance" class="inline-block mt-4 text-sm text-blue-600 hover:underline">View Detailed Report &rarr;</button>
+                        </div>
+                    </div>`;
+            };
+
+            const renderMarksCard = (isDashboard = false) => {
+                const recentMarks = studentData.marks.slice(0, 3);
+                return `
+                    <div id="marks" class="dashboard-card ${isDashboard ? '' : 'lg:col-span-3'}">
+                        <h3 class="dashboard-card-title">
+                             <span class="dashboard-card-icon bg-green-100 text-green-600"><i class="fas fa-graduation-cap"></i></span>
+                            ${isDashboard ? 'Recent Marks' : 'All Marks & Results'}
+                        </h3>
+                        <ul class="space-y-3 text-slate-600 text-sm">
+                            ${(isDashboard ? recentMarks : studentData.marks).map(mark => {
+                                const percentage = (mark.score / mark.total) * 100;
+                                const colorClass = percentage >= 75 ? 'bg-green-100 text-green-700' : percentage >= 50 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700';
+                                return `<li class="flex justify-between items-center">
+                                            <span>${mark.subject} (${mark.type})</span> 
+                                            <span class="font-bold ${colorClass} px-2 py-1 rounded-md">${mark.score}/${mark.total}</span>
+                                        </li>`;
+                            }).join('')}
+                        </ul>
+                         ${isDashboard ? `<button data-nav="marks" class="inline-block mt-4 text-sm text-green-600 hover:underline">View All Results &rarr;</button>`: ''}
+                    </div>`;
+            };
+            
+            const renderMedicalCard = (isDashboard = false) => {
+                const fullDocumentList = studentData.medical.documents.map(doc => `
+                    <li class="flex items-center justify-between p-2 bg-slate-50 rounded-md">
+                        <div class="flex items-center">
+                            <i class="fas fa-file-pdf text-red-500 mr-3"></i>
+                            <span class="text-slate-700">${doc.name}</span>
+                        </div>
+                         <div class="flex items-center space-x-3">
+                            <span class="text-xs text-slate-400">${doc.date}</span>
+                            <a href="${doc.link}" download class="text-red-600 hover:underline"><i class="fas fa-download"></i></a>
+                        </div>
+                    </li>
+                `).join('');
+
+                return `
+                    <div id="medical" class="dashboard-card ${isDashboard ? '' : 'lg:col-span-3'}">
+                        <h3 class="dashboard-card-title">
+                            <span class="dashboard-card-icon bg-red-100 text-red-600"><i class="fas fa-notes-medical"></i></span>
+                            Medical Information
+                        </h3>
+                        <div class="text-slate-600 text-sm">
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div><strong class="block text-slate-800">Blood Group:</strong><span>${studentData.medical.bloodGroup}</span></div>
+                                <div><strong class="block text-slate-800">Last Checkup:</strong><span>${studentData.medical.lastCheckup}</span></div>
+                                <div class="col-span-2"><strong class="block text-slate-800">Allergies:</strong><span>${studentData.medical.allergies}</span></div>
+                            </div>
+                            
+                            ${!isDashboard ? `
+                                <div class="mt-6">
+                                    <h4 class="font-bold text-slate-700 mb-2">Uploaded Documents</h4>
+                                    ${studentData.medical.documents.length > 0 ? `<ul class="space-y-2 mb-4">${fullDocumentList}</ul>` : `<p class="text-slate-400 text-center py-2">No documents uploaded.</p>`}
+                                </div>
+                            ` : ''}
+                            
+                            <button data-modal="medical" class="w-full bg-red-500 text-white text-sm py-2 rounded-lg hover:bg-red-600 transition mt-2">Update / Upload</button>
+                        </div>
+                    </div>`;
+            };
+            
+            const renderTimetable = () => {
+                mainHeader.textContent = "My Weekly Timetable";
+                const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+                const timetableHTML = days.map(day => {
+                    const classesToday = studentData.timetable[day] || [];
+                    const classesHTML = classesToday.length > 0 ? classesToday.map(c => `
+                        <div class="p-3 bg-cyan-50 border border-cyan-200 rounded-lg mb-2">
+                            <p class="font-bold text-cyan-800">${c.time}</p>
+                            <p class="text-sm text-slate-700">${c.subject} (${c.code})</p>
+                            <p class="text-xs text-slate-500"><i class="fas fa-user-tie mr-1"></i>${c.faculty}</p>
+                            <p class="text-xs text-slate-500"><i class="fas fa-map-marker-alt mr-1"></i>${c.location}</p>
+                        </div>
+                    `).join('') : `<p class="text-sm text-slate-400 p-3">No classes scheduled.</p>`;
+
+                    return `
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2 p-2 bg-slate-100 rounded-md">${day}</h4>
+                            ${classesHTML}
+                        </div>
+                    `;
+                }).join('');
+
+                mainContent.innerHTML = `
+                    <div class="dashboard-card">
+                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                            ${timetableHTML}
+                        </div>
+                    </div>
+                `;
+            };
+
+            const renderFeedbackCard = () => `
+                <div id="feedback" class="dashboard-card">
+                     <h3 class="dashboard-card-title">
+                        <span class="dashboard-card-icon bg-purple-100 text-purple-600"><i class="fas fa-comment-dots"></i></span>
+                        Feedback
+                    </h3>
+                    <form id="feedback-form">
+                        <select class="w-full p-2 border border-slate-300 rounded-md text-sm mb-3 text-slate-500">
+                            <option>Select Faculty...</option>
+                            ${studentData.faculty.map(f => `<option>${f}</option>`).join('')}
+                        </select>
+                        <textarea class="w-full p-2 border border-slate-300 rounded-md text-sm" rows="2" placeholder="Your anonymous feedback..."></textarea>
+                        <button type="submit" class="w-full mt-3 bg-purple-600 text-white text-sm py-2 rounded-lg hover:bg-purple-700 transition">Submit Feedback</button>
+                    </form>
+                </div>`;
+
+            const renderNotesCard = (isDashboard = false) => {
+                const recentNotes = studentData.notes.slice(0, 2);
+                const getIcon = (type) => {
+                    if (type === 'pdf') return 'fa-file-pdf text-red-500';
+                    if (type === 'ppt') return 'fa-file-powerpoint text-orange-500';
+                    return 'fa-file text-slate-500';
+                };
+                return `
+                    <div id="notes" class="dashboard-card ${isDashboard ? '' : 'lg:col-span-3'}">
+                         <h3 class="dashboard-card-title">
+                            <span class="dashboard-card-icon bg-orange-100 text-orange-600"><i class="fas fa-book-open"></i></span>
+                            ${isDashboard ? 'Class Notes' : 'All Class Notes'}
+                        </h3>
+                        <ul class="space-y-3 text-sm">
+                            ${(isDashboard ? recentNotes : studentData.notes).map(note => `
+                                <li class="flex items-center justify-between p-2 bg-slate-50 rounded-md">
+                                    <div class="flex items-center">
+                                        <i class="fas ${getIcon(note.type)} mr-3"></i>
+                                        <span class="text-slate-700">${note.name}</span>
+                                    </div>
+                                    <a href="${note.link}" download class="text-orange-600 hover:underline"><i class="fas fa-download"></i></a>
+                                </li>`).join('')}
+                        </ul>
+                         ${isDashboard ? `<button data-nav="notes" class="inline-block mt-4 text-sm text-orange-600 hover:underline">Browse All Notes &rarr;</button>` : ''}
+                    </div>`;
+            };
+
+
+            // --- MODAL CONTENT RENDERERS --- //
+
+            const renderAttendanceModal = () => {
+                modalTitle.textContent = "Detailed Attendance Report";
+                const subjectDetails = studentData.attendance.subjects.map(s => {
+                    const percentage = Math.round((s.attended / s.total) * 100);
+                    const colorClass = percentage >= 75 ? 'bg-green-500' : percentage >= 50 ? 'bg-yellow-500' : 'bg-red-500';
+                    return `
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-1 text-sm">
+                                <span class="text-slate-700">${s.name}</span>
+                                <span class="font-semibold">${percentage}% (${s.attended}/${s.total})</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2">
+                                <div class="${colorClass} h-2 rounded-full" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                modalBody.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-3">Attendance by Subject</h4>
+                            ${subjectDetails}
+                        </div>
+                        <div>
+                             <h4 class="font-bold text-slate-800 mb-3">Attendance Chart</h4>
+                             <canvas id="attendanceChart"></canvas>
+                        </div>
+                    </div>
+                     <div class="text-center mt-6">
+                        <button onclick="window.print()" class="bg-slate-700 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition text-sm"><i class="fas fa-print mr-2"></i>Print Report</button>
+                    </div>
+                `;
+
+                new Chart(document.getElementById('attendanceChart'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Attended', 'Missed'],
+                        datasets: [{
+                            data: [studentData.attendance.attended, studentData.attendance.totalClasses - studentData.attendance.attended],
+                            backgroundColor: ['#10b981', '#ef4444'],
+                            borderColor: ['#ffffff'],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { position: 'top' } }
+                    }
+                });
+                openModal();
+            };
+            
+            const renderMedicalModal = () => {
+                modalTitle.textContent = "Update Health Record";
+                modalBody.innerHTML = `
+                    <form id="medical-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="blood-group" class="block text-sm font-medium text-slate-700 mb-1">Blood Group</label>
+                                <input type="text" id="blood-group" value="${studentData.medical.bloodGroup}" class="w-full p-2 border border-slate-300 rounded-md text-sm">
+                            </div>
+                            <div>
+                                <label for="last-checkup" class="block text-sm font-medium text-slate-700 mb-1">Last Checkup Date</label>
+                                <input type="date" id="last-checkup" value="2025-07-15" class="w-full p-2 border border-slate-300 rounded-md text-sm">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <label for="allergies" class="block text-sm font-medium text-slate-700 mb-1">Allergies</label>
+                            <textarea id="allergies" rows="2" class="w-full p-2 border border-slate-300 rounded-md text-sm">${studentData.medical.allergies}</textarea>
+                        </div>
+                        <div class="mt-4">
+                            <label for="medical-upload" class="block text-sm font-medium text-slate-700 mb-1">Upload New Document (e.g., prescription, report)</label>
+                            <input type="file" id="medical-upload" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100">
+                        </div>
+                        <div class="text-right mt-6 border-t pt-4">
+                            <button type="button" id="modal-cancel-btn" class="bg-slate-200 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-300 transition text-sm mr-2">Cancel</button>
+                            <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition text-sm">Save Changes</button>
+                        </div>
+                    </form>
+                `;
+                document.getElementById('medical-form').addEventListener('submit', handleMedicalFormSubmit);
+                document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
+                openModal();
+            };
+
+            const handleMedicalFormSubmit = (e) => {
+                e.preventDefault();
+                studentData.medical.bloodGroup = document.getElementById('blood-group').value;
+                const checkupDate = new Date(document.getElementById('last-checkup').value);
+                const localDate = new Date(checkupDate.getTime() + checkupDate.getTimezoneOffset() * 60000);
+                studentData.medical.lastCheckup = localDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+                studentData.medical.allergies = document.getElementById('allergies').value;
+                
+                const fileInput = document.getElementById('medical-upload');
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const newDocument = {
+                        name: file.name,
+                        date: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+                        link: '#'
+                    };
+                    studentData.medical.documents.push(newDocument);
+                }
+
+                closeModal();
+                navigate(window.location.hash || '#dashboard');
+                showToast('Health record updated successfully!');
+            };
+
+            const showToast = (message) => {
+                const toast = document.createElement('div');
+                toast.className = 'fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg animate-fade-in-out z-50';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    @keyframes fade-in-out {
+                        0% { opacity: 0; transform: translateY(-20px); }
+                        10% { opacity: 1; transform: translateY(0); }
+                        90% { opacity: 1; transform: translateY(0); }
+                        100% { opacity: 0; transform: translateY(-20px); }
+                    }
+                    .animate-fade-in-out { animation: fade-in-out 3s ease-in-out forwards; }
+                `;
+                document.head.appendChild(style);
+                setTimeout(() => { toast.remove(); style.remove(); }, 3000);
+            };
+
+            // --- EVENT LISTENERS --- //
+
+            const setActiveLink = (hash) => {
+                navLinks.forEach(link => {
+                    link.classList.remove('sidebar-link-active');
+                    link.classList.add('text-slate-300', 'hover:bg-slate-700');
+                    if(link.getAttribute('href') === hash) {
+                        link.classList.add('sidebar-link-active');
+                        link.classList.remove('text-slate-300', 'hover:bg-slate-700');
+                    }
+                });
+            };
+
+            const navigate = (hash) => {
+                setActiveLink(hash);
+                window.location.hash = hash;
+                switch (hash) {
+                    case '#attendance':
+                        mainHeader.textContent = "Attendance";
+                        mainContent.innerHTML = renderAttendanceCard();
+                        break;
+                    case '#marks':
+                         mainHeader.textContent = "Marks & Results";
+                        mainContent.innerHTML = renderMarksCard();
+                        break;
+                    case '#timetable':
+                        renderTimetable();
+                        break;
+                    case '#medical':
+                        mainHeader.textContent = "Medical";
+                        mainContent.innerHTML = renderMedicalCard();
+                        break;
+                    case '#feedback':
+                         mainHeader.textContent = "Feedback";
+                        mainContent.innerHTML = renderFeedbackCard();
+                        break;
+                    case '#notes':
+                         mainHeader.textContent = "Class Notes";
+                        mainContent.innerHTML = renderNotesCard();
+                        break;
+                    case '#dashboard':
+                    default:
+                        renderDashboard();
+                        break;
+                }
+                attachCardEventListeners();
+            };
+
+            sidebarNav.addEventListener('click', (e) => {
+                const link = e.target.closest('.nav-link');
+                if (link) {
+                    e.preventDefault();
+                    navigate(link.getAttribute('href'));
+                }
+            });
+
+            // Handle card button clicks for navigation/modals
+            const attachCardEventListeners = () => {
+                mainContent.addEventListener('click', e => {
+                    const button = e.target.closest('button');
+                    if(!button) return;
+                    
+                    if(button.dataset.nav) {
+                        e.preventDefault();
+                        navigate(`#${button.dataset.nav}`);
+                    }
+                    if(button.dataset.modal) {
+                         e.preventDefault();
+                        if(button.dataset.modal === 'attendance') renderAttendanceModal();
+                        if(button.dataset.modal === 'medical') renderMedicalModal();
+                    }
+                });
+
+                const feedbackForm = document.getElementById('feedback-form');
+                if(feedbackForm){
+                    feedbackForm.addEventListener('submit', e => {
+                        e.preventDefault();
+                        showToast('Feedback submitted successfully! (This is a demo)');
+                        feedbackForm.reset();
+                    });
+                }
+            };
+            
+            // Modal listeners
+            const openModal = () => {
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.firstElementChild.classList.remove('scale-95'), 10);
+            };
+            const closeModal = () => {
+                 modal.firstElementChild.classList.add('scale-95')
+                 setTimeout(() => modal.classList.add('hidden'), 300);
+            };
+            modalCloseBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', e => {
+                if (e.target === modal) closeModal();
+            });
+
+
+            // --- INITIALIZATION --- //
+            const initialHash = window.location.hash || '#dashboard';
+            navigate(initialHash);
+        });
+    </script>
+</body>
+</html>
+
